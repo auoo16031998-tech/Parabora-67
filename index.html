@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ระบบเรียนรู้พาราโบลา & การวิเคราะห์สู่ อินฟินิตี้ (ม.4)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#05070f',
+                            panel: 'rgba(13, 19, 36, 0.75)',
+                            card: 'rgba(21, 30, 54, 0.6)',
+                            border: 'rgba(56, 189, 248, 0.25)',
+                            neonCyan: '#38bdf8',
+                            neonOrange: '#fb923c',
+                            neonPurple: '#c084fc',
+                            neonPink: '#f43f5e',
+                            neonGreen: '#34d399',
+                            neonYellow: '#facc15'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Sarabun', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Sarabun & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            touch-action: manipulation;
+        }
+        body {
+            font-family: 'Sarabun', 'Inter', sans-serif;
+            background-color: #03050c;
+            color: #f1f5f9;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(251, 146, 60, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.08) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(56, 189, 248, 0.04);
+        }
+
+        .glass-card {
+            background: rgba(20, 29, 51, 0.55);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Neon Text and Border Glows */
+        .neon-glow-cyan {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        .neon-glow-orange {
+            box-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
+        }
+        .neon-glow-pink {
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+        }
+        
+        .text-glow-cyan {
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+        }
+        .text-glow-orange {
+            text-shadow: 0 0 12px rgba(251, 146, 60, 0.6);
+        }
+        .text-glow-pink {
+            text-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(5, 7, 15, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(56, 189, 248, 0.6);
+        }
+
+        /* Infinity Badge Animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .infinity-pulse {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* Custom Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: rgba(30, 41, 59, 0.8);
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 0 10px #38bdf8;
+            border: 2px solid #ffffff;
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-100">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-sky-500/30 px-3 sm:px-6 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-orange-500 flex items-center justify-center neon-glow-cyan shadow-lg">
+                        <i class="fa-solid fa-infinity text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-purple-300 to-orange-400">
+                            PARABOLA <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40">ม.4 Infinity Lab</span>
+                        </h1>
+                        <p class="text-[11px] text-slate-400 font-light">เครื่องมือเรียนรู้พาราโบลา & การวิเคราะห์ลิมิตสู่ อินฟินิตี้ (∞)</p>
+                    </div>
+                </div>
+
+                <!-- Orientation Toggle Button for Mobile Header -->
+                <button onclick="toggleOrientation()" class="md:hidden px-2.5 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span id="mobile-orientation-text">แนวตั้ง (y)</span>
+                </button>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex flex-wrap justify-center gap-1 sm:gap-2 w-full md:w-auto">
+                <button onclick="switchTab('graph')" id="btn-tab-graph" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-sky-500/25 text-sky-300 border border-sky-500/50 shadow-md">
+                    <i class="fa-solid fa-chart-line mr-1.5"></i> กราฟ & ปรับค่า
+                </button>
+                <button onclick="switchTab('analysis')" id="btn-tab-analysis" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-square-root-variable mr-1.5"></i> วิเคราะห์องค์ประกอบ
+                </button>
+                <button onclick="switchTab('infinity')" id="btn-tab-infinity" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-atom mr-1.5"></i> ทฤษฎีลิมิต ∞
+                </button>
+                <button onclick="switchTab('quiz')" id="btn-tab-quiz" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-brain mr-1.5"></i> แบบทดสอบ
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-4 md:p-6 pb-12">
+
+        <!-- ========================================================================= -->
+        <!-- TAB 1: INTERACTIVE GRAPH & CONTROLS -->
+        <!-- ========================================================================= -->
+        <div id="tab-graph" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
+            
+            <!-- Left Side Controls Panel (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                
+                <!-- Equation Preview & Mode Selector Card -->
+                <div class="glass-panel p-4 sm:p-5 rounded-2xl relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-square-root-variable"></i> สมการพาราโบลาปัจจุบัน
+                        </span>
+                        
+                        <!-- Toggle Orientation -->
+                        <button onclick="toggleOrientation()" class="hidden md:flex px-3 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 text-xs font-medium items-center gap-1.5 transition-all">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span id="desktop-orientation-text">แนวตั้ง: (y-k) = a(x-h)²</span>
+                        </button>
+                    </div>
+
+                    <!-- Main Dynamic Equation Box -->
+                    <div id="equation-standard" class="text-base sm:text-xl font-bold font-mono text-center py-3 px-2 bg-slate-950/70 rounded-xl border border-sky-500/30 text-sky-300 shadow-inner break-all">
+                        (y - 0) = 1.00(x - 0)²
+                    </div>
+
+                    <!-- Focus Form (c parameter) preview -->
+                    <div class="mt-2.5 flex justify-between items-center text-xs font-mono px-1">
+                        <span class="text-slate-400">รูปแบบโฟกัส 4c:</span>
+                        <span id="equation-focus-form" class="text-orange-400 font-semibold">(y - 0)² = 4(0.25)(x - 0)</span>
+                    </div>
+
+                    <!-- Infinity Alert Banner (if applicable) -->
+                    <div id="infinity-status-banner" class="hidden mt-3 p-2.5 rounded-xl bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/40 flex items-center gap-2 text-xs text-purple-200">
+                        <i class="fa-solid fa-circle-exclamation text-pink-400 text-sm animate-pulse"></i>
+                        <span id="infinity-banner-text">กำลังวิเคราะห์สภาวะเข้าสู่อินฟินิตี้ (∞)</span>
+                    </div>
+                </div>
+
+                <!-- Parameters Sliders & Unlimited Control Panel -->
+                <div class="glass-panel p-4 sm:p-5 rounded-2xl flex flex-col gap-4">
+                    <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders"></i> ปรับพารามิเตอร์ (a, h, k)
+                        </h2>
+                        <button onclick="resetAllParams()" class="text-xs text-sky-400 hover:text-sky-300 flex items-center gap-1">
+                            <i class="fa-solid fa-rotate-right"></i> รีเซ็ตค่า
+                        </button>
+                    </div>
+
+                    <!-- PARAMETER A CONTROL -->
+                    <div class="flex flex-col gap-2 p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-sky-300 flex items-center gap-1.5">
+                                สัมประสิทธิ์ <strong class="text-sky-400 text-sm">a</strong> (ความกว้าง / ทิศทาง)
+                            </label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="text" id="num-input-a" value="1.00" onchange="manualInputChanged('a', this.value)" class="w-20 px-2 py-0.5 rounded-md bg-slate-950 border border-sky-500/40 text-xs font-mono text-center text-sky-300 focus:outline-none focus:border-sky-400">
+                            </div>
+                        </div>
+
+                        <!-- Range Slider -->
+                        <input type="range" id="slider-a" min="-5" max="5" step="0.05" value="1" oninput="sliderInputChanged('a', this.value)">
+
+                        <!-- Infinity & Preset Buttons for a -->
+                        <div class="flex flex-wrap gap-1 mt-1 justify-between">
+                            <span class="text-[10px] text-slate-500">ทางเลือก ∞:</span>
+                            <div class="flex gap-1 flex-wrap">
+                                <button onclick="setParamValue('a', 'Infinity')" class="px-2 py-0.5 rounded bg-sky-500/20 hover:bg-sky-500/40 border border-sky-500/40 text-[11px] font-mono text-sky-300 transition-all">+∞ (แคบสุด)</button>
+                                <button onclick="setParamValue('a', '-Infinity')" class="px-2 py-0.5 rounded bg-sky-500/20 hover:bg-sky-500/40 border border-sky-500/40 text-[11px] font-mono text-sky-300 transition-all">-∞ (คว่ำแคบ)</button>
+                                <button onclick="setParamValue('a', 0)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">0 (เส้นตรง)</button>
+                                <button onclick="setParamValue('a', 100)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">100</button>
+                                <button onclick="setParamValue('a', -100)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">-100</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PARAMETER H CONTROL -->
+                    <div class="flex flex-col gap-2 p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-orange-300 flex items-center gap-1.5">
+                                พิกัดจุดยอด <strong class="text-orange-400 text-sm">h</strong> (เลื่อนขนานแกน X)
+                            </label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="text" id="num-input-h" value="0.00" onchange="manualInputChanged('h', this.value)" class="w-20 px-2 py-0.5 rounded-md bg-slate-950 border border-orange-500/40 text-xs font-mono text-center text-orange-300 focus:outline-none focus:border-orange-400">
+                            </div>
+                        </div>
+
+                        <!-- Range Slider -->
+                        <input type="range" id="slider-h" min="-20" max="20" step="0.5" value="0" oninput="sliderInputChanged('h', this.value)">
+
+                        <!-- Infinity & Preset Buttons for h -->
+                        <div class="flex flex-wrap gap-1 mt-1 justify-between">
+                            <span class="text-[10px] text-slate-500">ทางเลือก ∞:</span>
+                            <div class="flex gap-1 flex-wrap">
+                                <button onclick="setParamValue('h', 'Infinity')" class="px-2 py-0.5 rounded bg-orange-500/20 hover:bg-orange-500/40 border border-orange-500/40 text-[11px] font-mono text-orange-300 transition-all">+∞ (ขวาสุด)</button>
+                                <button onclick="setParamValue('h', '-Infinity')" class="px-2 py-0.5 rounded bg-orange-500/20 hover:bg-orange-500/40 border border-orange-500/40 text-[11px] font-mono text-orange-300 transition-all">-∞ (ซ้ายสุด)</button>
+                                <button onclick="setParamValue('h', 0)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">0</button>
+                                <button onclick="setParamValue('h', 500)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">500</button>
+                                <button onclick="setParamValue('h', -500)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">-500</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PARAMETER K CONTROL -->
+                    <div class="flex flex-col gap-2 p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+                                พิกัดจุดยอด <strong class="text-purple-400 text-sm">k</strong> (เลื่อนขนานแกน Y)
+                            </label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="text" id="num-input-k" value="0.00" onchange="manualInputChanged('k', this.value)" class="w-20 px-2 py-0.5 rounded-md bg-slate-950 border border-purple-500/40 text-xs font-mono text-center text-purple-300 focus:outline-none focus:border-purple-400">
+                            </div>
+                        </div>
+
+                        <!-- Range Slider -->
+                        <input type="range" id="slider-k" min="-20" max="20" step="0.5" value="0" oninput="sliderInputChanged('k', this.value)">
+
+                        <!-- Infinity & Preset Buttons for k -->
+                        <div class="flex flex-wrap gap-1 mt-1 justify-between">
+                            <span class="text-[10px] text-slate-500">ทางเลือก ∞:</span>
+                            <div class="flex gap-1 flex-wrap">
+                                <button onclick="setParamValue('k', 'Infinity')" class="px-2 py-0.5 rounded bg-purple-500/20 hover:bg-purple-500/40 border border-purple-500/40 text-[11px] font-mono text-purple-300 transition-all">+∞ (บนสุด)</button>
+                                <button onclick="setParamValue('k', '-Infinity')" class="px-2 py-0.5 rounded bg-purple-500/20 hover:bg-purple-500/40 border border-purple-500/40 text-[11px] font-mono text-purple-300 transition-all">-∞ (ล่างสุด)</button>
+                                <button onclick="setParamValue('k', 0)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">0</button>
+                                <button onclick="setParamValue('k', 500)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">500</button>
+                                <button onclick="setParamValue('k', -500)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-slate-300">-500</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Preset Scenarios -->
+                    <div class="flex flex-col gap-1.5 pt-2 border-t border-slate-800">
+                        <span class="text-[11px] font-medium text-slate-400">ชุดตัวอย่างสภาวะพิเศษ (Presets):</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                            <button onclick="applyPreset('standard')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-sky-300 text-left truncate">
+                                📌 พาราโบลามาตรฐาน
+                            </button>
+                            <button onclick="applyPreset('inf-a')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-purple-300 text-left truncate">
+                                ⚡ a ➔ ∞ (เส้นตรง)
+                            </button>
+                            <button onclick="applyPreset('zero-a')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 text-left truncate">
+                                ➖ a = 0 (เส้นแนวนอน)
+                            </button>
+                            <button onclick="applyPreset('inf-h')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-orange-300 text-left truncate">
+                                🌌 h ➔ ∞ (ไกลขวา)
+                            </button>
+                            <button onclick="applyPreset('inf-k')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-pink-300 text-left truncate">
+                                🚀 k ➔ -∞ (ลงล่างสุด)
+                            </button>
+                            <button onclick="applyPreset('huge-vals')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-amber-300 text-left truncate">
+                                💥 ค่ามหาศาล (Huge)
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right Side Interactive Canvas (7 cols) -->
+            <div class="lg:col-span-7 flex flex-col gap-4">
+                
+                <div class="glass-panel p-3 sm:p-4 rounded-2xl flex flex-col gap-3 relative">
+                    
+                    <!-- Graph Canvas Header Tools -->
+                    <div class="flex flex-wrap justify-between items-center gap-2 px-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping"></span>
+                            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                Cartesian Graph Window
+                            </span>
+                        </div>
+                        
+                        <!-- Canvas Control Buttons -->
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="autoScaleCanvas()" class="px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-xs font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-expand"></i> Auto Scale
+                            </button>
+                            <button onclick="zoomCanvas(1.25)" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-sky-300"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                            <button onclick="zoomCanvas(0.8)" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-sky-300"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                            <button onclick="resetCanvasView()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-orange-300"><i class="fa-solid fa-house"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Viewport Wrapper -->
+                    <div class="relative w-full aspect-square sm:aspect-[4/3] rounded-xl overflow-hidden bg-slate-950/90 border border-sky-500/30 shadow-2xl">
+                        <canvas id="mainCanvas" class="w-full h-full block cursor-crosshair touch-none"></canvas>
+                        
+                        <!-- Canvas Overlay: Current Viewport Scale & Coordinates Display -->
+                        <div class="absolute top-2 left-2 pointer-events-none flex flex-col gap-1">
+                            <div class="px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur border border-slate-700 text-[11px] font-mono text-sky-300">
+                                Zoom: <span id="overlay-zoom">1.0x</span> | Grid: <span id="overlay-scale">30px/unit</span>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Overlay: Infinity State Vector Indicator -->
+                        <div id="canvas-infinity-indicator" class="hidden absolute top-2 right-2 pointer-events-none px-3 py-1.5 rounded-lg bg-purple-950/90 border border-purple-500/50 text-xs font-mono text-purple-300 flex items-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-atom text-pink-400 animate-spin"></i>
+                            <span id="canvas-infinity-text">โหมดสภาวะอนันต์ (∞)</span>
+                        </div>
+
+                        <!-- Touch Navigation Tip -->
+                        <div class="absolute bottom-2 left-2 pointer-events-none text-[10px] text-slate-400 bg-slate-900/80 backdrop-blur px-2 py-1 rounded border border-slate-800 flex items-center gap-1">
+                            <i class="fa-solid fa-hand-pointer text-orange-400"></i> ลากเพื่อเลื่อนกราฟ | แตะเพื่อสำรวจพิกัด
+                        </div>
+                    </div>
+
+                    <!-- Coordinates Inspector Box below graph -->
+                    <div class="glass-card px-3 py-2 rounded-xl flex flex-wrap justify-between items-center text-xs font-mono text-slate-300 gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-400">พิกัดเคอร์เซอร์:</span>
+                            <span id="inspect-coords" class="text-sky-300 font-bold">(0.00, 0.00)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-400">ค่าบนเส้นพาราโบลา y(x):</span>
+                            <span id="inspect-curve-y" class="text-orange-400 font-bold">0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Legend Items -->
+                    <div class="flex flex-wrap justify-between items-center text-[11px] text-slate-400 px-1 gap-2 border-t border-slate-800/80 pt-2">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-400 inline-block"></span> พาราโบลา</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-orange-400 inline-block"></span> จุดยอด (V)</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span> จุดโฟกัส (F)</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-0.5 bg-rose-400 inline-block"></span> เส้นไดเรกตริกซ์</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-0.5 bg-amber-400 inline-block"></span> ลาตัสเรกตั้ม</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 2: DETAILED ANALYSIS & ELEMENTS -->
+        <!-- ========================================================================= -->
+        <div id="tab-analysis" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            
+            <!-- Vertex Card -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-orange-400">จุดยอด (Vertex: V)</span>
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">V</span>
+                </div>
+                <div id="card-vertex-val" class="text-lg font-bold font-mono text-orange-300 bg-slate-950/60 p-3 rounded-xl border border-orange-500/30">
+                    (h, k) = (0.00, 0.00)
+                </div>
+                <p id="card-vertex-desc" class="text-xs text-slate-300 leading-relaxed">
+                    จุดยอดคือจุดเลี้ยวหรือจุดสูงสุด/ต่ำสุดของกราฟพาราโบลา
+                </p>
+            </div>
+
+            <!-- Focus Point Card -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-purple-400">จุดโฟกัส (Focus: F)</span>
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">F</span>
+                </div>
+                <div id="card-focus-val" class="text-lg font-bold font-mono text-purple-300 bg-slate-950/60 p-3 rounded-xl border border-purple-500/30">
+                    (h, k + c) = (0.00, 0.25)
+                </div>
+                <p id="card-focus-desc" class="text-xs text-slate-300 leading-relaxed">
+                    ระยะโฟกัส c = 1 / (4a) = 0.2500
+                </p>
+            </div>
+
+            <!-- Directrix Line Card -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-rose-400">เส้นไดเรกตริกซ์ (Directrix)</span>
+                    <span class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-sm">D</span>
+                </div>
+                <div id="card-directrix-val" class="text-lg font-bold font-mono text-rose-300 bg-slate-950/60 p-3 rounded-xl border border-rose-500/30">
+                    y = k - c = -0.25
+                </div>
+                <p id="card-directrix-desc" class="text-xs text-slate-300 leading-relaxed">
+                    เส้นตรงที่ตั้งฉากกับแกนสมมาตร และอยู่ห่างจากจุดยอดเท่ากับระยะ c
+                </p>
+            </div>
+
+            <!-- Axis of Symmetry Card -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-400">แกนสมมาตร (Axis of Symmetry)</span>
+                    <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">A</span>
+                </div>
+                <div id="card-axis-val" class="text-lg font-bold font-mono text-sky-300 bg-slate-950/60 p-3 rounded-xl border border-sky-500/30">
+                    x = h = 0.00
+                </div>
+                <p id="card-axis-desc" class="text-xs text-slate-300 leading-relaxed">
+                    เส้นตรงที่แบ่งครึ่งกราฟพาราโบลาออกเป็นสองฝั่งที่สะท้อนกัน
+                </p>
+            </div>
+
+            <!-- Latus Rectum Card -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-400">ลาตัสเรกตั้ม (Latus Rectum)</span>
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">LR</span>
+                </div>
+                <div id="card-latus-val" class="text-lg font-bold font-mono text-amber-300 bg-slate-950/60 p-3 rounded-xl border border-amber-500/30">
+                    ความยาว |4c| = 1.000
+                </div>
+                <p id="card-latus-endpoints" class="text-xs font-mono text-slate-300">
+                    จุดปลาย: (-0.50, 0.25) และ (0.50, 0.25)
+                </p>
+            </div>
+
+            <!-- General Form Converter Card -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">รูปแบบทั่วไป (General Form)</span>
+                    <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">G</span>
+                </div>
+                <div id="card-general-val" class="text-sm font-bold font-mono text-emerald-300 bg-slate-950/60 p-3 rounded-xl border border-emerald-500/30 break-all">
+                    y = 1.00x² + 0.00x + 0.00
+                </div>
+                <p class="text-xs text-slate-300">
+                    กระจายสมการมาตรฐานได้ ax² + bx + c โดย b = -2ah, c_gen = ah² + k
+                </p>
+            </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 3: INFINITY & LIMIT ANALYSIS THEORY -->
+        <!-- ========================================================================= -->
+        <div id="tab-infinity" class="tab-content hidden flex flex-col gap-6">
+            
+            <div class="glass-panel p-6 rounded-2xl border border-purple-500/40 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <h2 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-purple-300 to-pink-400 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-atom text-purple-400"></i> การวิเคราะห์เชิงลึก: สภาวะเข้าสู่อินฟินิตี้ (Limit Analysis to Infinity)
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
+                    ในทางคณิตศาสตร์ชั้นสูง (แคลคูลัส & เรขาคณิตวิเคราะห์) พารามิเตอร์ $a, h, k$ ของพาราโบลาเมื่อเข้าสู่อินฟินิตี้ ($\infty$) จะสร้างปรากฏการณ์ลิมิตและรูปแบบพฤติกรรมสุดขั้ว ดังนี้:
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Infinity Theory Case 1: a -> Infinity -->
+                <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3 relative border-t-2 border-t-sky-400">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-sky-400 font-mono">กรณี 1: a ➔ ±∞</span>
+                        <span class="px-2 py-0.5 rounded bg-sky-500/20 text-[11px] font-mono text-sky-300">Degenerate Case</span>
+                    </div>
+                    <h3 class="text-base font-bold text-white">กราฟบีบแคบจนกลายเป็นเส้นตรงแนวตั้ง</h3>
+                    
+                    <div class="p-3 bg-slate-950/80 rounded-xl font-mono text-xs text-sky-300 border border-sky-500/30">
+                        $$\lim_{a \to \infty} a(x-h)^2 = \begin{cases} 0 & ; x = h \\ \infty & ; x \neq h \end{cases}$$
+                    </div>
+                    <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+                        <li>เมื่อ $|a| \to \infty$ แขนของพาราโบลาจะบีบแคบลงอย่างรวดเร็ว</li>
+                        <li><strong>ระยะโฟกัส:</strong> $\lim_{a \to \infty} c = \lim_{a \to \infty} \frac{1}{4a} = 0$</li>
+                        <li>จุดโฟกัส (F) จะขยับเข้านิพจน์เดียวกับจุดยอด (V)</li>
+                        <li>ในสภาวะลิมิตสุดขั้ว กราฟจะเสมือนกลายเป็น <strong>เส้นตรงแนวตั้ง $x = h$</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Infinity Theory Case 2: a -> 0 -->
+                <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3 relative border-t-2 border-t-orange-400">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-orange-400 font-mono">กรณี 2: a ➔ 0 (ระยะโฟกัส c ➔ ∞)</span>
+                        <span class="px-2 py-0.5 rounded bg-orange-500/20 text-[11px] font-mono text-orange-300">Flat Line Limit</span>
+                    </div>
+                    <h3 class="text-base font-bold text-white">กราฟแบนราบจนกลายเป็นเส้นตรงแนวนอน</h3>
+                    
+                    <div class="p-3 bg-slate-950/80 rounded-xl font-mono text-xs text-orange-300 border border-orange-500/30">
+                        $$\lim_{a \to 0} [a(x-h)^2 + k] = k$$
+                    </div>
+                    <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+                        <li>เมื่อ $a \to 0$ พาราโบลาจะบานออกจนแบนราบ</li>
+                        <li><strong>ระยะโฟกัส:</strong> $c = \frac{1}{4a} \to \infty$ จุดโฟกัสและเส้นไดเรกตริกซ์จะถอยห่างออกไปไกลถึงอินฟินิตี้</li>
+                        <li>เส้นโค้งพาราโบลาจะเปลี่ยนสภาพกลายเป็น <strong>เส้นตรงแนวนอน $y = k$</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Infinity Theory Case 3: h, k -> Infinity -->
+                <div class="glass-panel p-5 rounded-2xl flex flex-col gap-3 relative border-t-2 border-t-purple-400">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-purple-400 font-mono">กรณี 3: h หรือ k ➔ ±∞</span>
+                        <span class="px-2 py-0.5 rounded bg-purple-500/20 text-[11px] font-mono text-purple-300">Translation Limit</span>
+                    </div>
+                    <h3 class="text-base font-bold text-white">จุดยอดเลื่อนหลุดออกไป ณ อนันต์</h3>
+                    
+                    <div class="p-3 bg-slate-950/80 rounded-xl font-mono text-xs text-purple-300 border border-purple-500/30">
+                        $$\lim_{h \to \infty} V(h, k) = (\infty, k)$$
+                    </div>
+                    <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+                        <li>เมื่อ $h \to \pm\infty$ หรือ $k \to \pm\infty$ จุดยอด (Vertex) และจุดโฟกัส จะย้ายตำแหน่งไปไกลอย่างไร้ขีดจำกัด</li>
+                        <li>ระบบซูมอัตโนมัติ (Dynamic Auto-Scale) จะปรับขนาดกรอบพิกัดเพื่อให้เห็นทิศทางและแนวโน้มการวิ่งของเส้นโค้งเข้าสู่ขอบฟ้า</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 4: QUIZ & KNOWLEDGE ASSESSMENT -->
+        <!-- ========================================================================= -->
+        <div id="tab-quiz" class="tab-content hidden max-w-2xl mx-auto flex flex-col gap-6">
+            
+            <div class="glass-panel p-5 sm:p-8 rounded-2xl border border-sky-500/30">
+                
+                <!-- Quiz Header -->
+                <div class="flex justify-between items-center mb-6 border-b border-slate-700/80 pb-4">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-sky-400"></i> แบบทดสอบวัดความเข้าใจเรื่องพาราโบลา & ลิมิต
+                        </h2>
+                        <p class="text-xs text-slate-400">ทดสอบความรู้เกี่ยวกับจุดยอด, โฟกัส, ไดเรกตริกซ์ และสภาวะอินฟินิตี้</p>
+                    </div>
+                    <div class="glass-card px-3 py-1.5 rounded-xl text-right">
+                        <span class="text-[10px] text-slate-400 block uppercase">คะแนน</span>
+                        <span id="quiz-score-num" class="font-mono text-base sm:text-lg font-bold text-sky-400">0 / 5</span>
+                    </div>
+                </div>
+
+                <!-- Active Question Container -->
+                <div id="quiz-question-box" class="flex flex-col gap-5">
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-mono">
+                        <span id="quiz-step-text">ข้อที่ 1 จาก 5</span>
+                        <span id="quiz-cat-text" class="text-orange-400">สภาวะเข้าสู่อินฟินิตี้</span>
+                    </div>
+
+                    <h3 id="quiz-question-title" class="text-sm sm:text-base font-semibold text-slate-100 leading-relaxed">
+                        เมื่อสัมประสิทธิ์ a ของพาราโบลา y = a(x - h)² + k มีค่าเข้าสู่อินฟินิตี้ (a ➔ ∞) กราฟพาราโบลาจะมีลักษณะอย่างไร?
+                    </h3>
+
+                    <div id="quiz-options-list" class="grid grid-cols-1 gap-2.5">
+                        <!-- Options populated via JS -->
+                    </div>
+
+                    <!-- Explanation Alert Box -->
+                    <div id="quiz-explanation-box" class="hidden p-4 rounded-xl bg-slate-900/90 border border-sky-500/40 text-xs text-slate-200 leading-relaxed">
+                        <!-- Explanation populated via JS -->
+                    </div>
+
+                    <!-- Next Question Button -->
+                    <button id="btn-quiz-next" onclick="nextQuizStep()" class="hidden w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-sm shadow-lg transition-all">
+                        ข้อถัดไป <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+
+                <!-- Quiz Completion Container -->
+                <div id="quiz-result-box" class="hidden flex flex-col items-center justify-center text-center py-6 gap-4">
+                    <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl border border-emerald-500/40 shadow-lg">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">ทดสอบเสร็จสิ้น!</h3>
+                    <p id="quiz-final-eval" class="text-xs sm:text-sm text-slate-300 max-w-md">
+                        คุณทำคะแนนได้ดีเยี่ยม ยอดเยี่ยมในการเข้าใจแนวคิดพาราโบลาและลิมิต!
+                    </p>
+                    <button onclick="restartQuiz()" class="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold text-xs transition-all">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> ทำแบบทดสอบอีกครั้ง
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Application Logic Javascript -->
+    <script>
+        // --- State Variables ---
+        let paramA = 1.0;
+        let paramH = 0.0;
+        let paramK = 0.0;
+        let isVertical = true; // true: (y-k) = a(x-h)^2, false: (x-h) = a(y-k)^2
+
+        // Canvas Viewport State
+        let canvas, ctx;
+        let scale = 30; // base pixels per unit
+        let offsetX = 0; // translation in pixels
+        let offsetY = 0;
+        let isDragging = false;
+        let startX, startY;
+        let hoverMathX = null;
+        let hoverMathY = null;
+
+        // Quiz System State
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        const quizQuestions = [
+            {
+                cat: "ลิมิตสู่ อินฟินิตี้",
+                title: "เมื่อสัมประสิทธิ์ a ของพาราโบลา (y - k) = a(x - h)² มีค่าเข้าสู่อินฟินิตี้ (|a| ➔ ∞) กราฟพาราโบลาจะมีพฤติกรรมอย่างไร?",
+                options: [
+                    "กราฟบานกว้างออกจนแบนราบกลายเป็นเส้นตรงแนวนอน",
+                    "กราฟจะบีบแคบลงเรื่อยๆ จนกลายสภาพเป็นเส้นตรงแนวตั้ง x = h",
+                    "จุดยอดของพาราโบลาจะหายไป",
+                    "พาราโบลาจะเปลี่ยนทิศทางการเปิดเป็นหงายและคว่ำพร้อมกัน"
+                ],
+                correct: 1,
+                expl: "ถูกต้อง! เมื่อ |a| ➔ ∞ ความกว้างพาราโบลาจะลดลงเข้าสู่ 0 และระยะโฟกัส c = 1/(4a) ➔ 0 ส่งผลให้พาราโบลาบีบแคบจนกลายเป็นเส้นตรงแนวตั้ง x = h"
+            },
+            {
+                cat: "องค์ประกอบพาราโบลา",
+                title: "สมการพาราโบลา (y - 3) = 2(x + 1)² มีจุดยอด (Vertex) อยู่ที่พิกัดใด?",
+                options: [
+                    "(1, -3)",
+                    "(-1, 3)",
+                    "(3, -1)",
+                    "(-3, 1)"
+                ],
+                correct: 1,
+                expl: "เทียบสมการมาตรฐาน (y - k) = a(x - h)² จะได้ h = -1 และ k = 3 ดังนั้น จุดยอด V(h, k) = (-1, 3)"
+            },
+            {
+                cat: "ระยะโฟกัส c",
+                title: "หากพาราโบลาเปิดขึ้นบน มีสมการ (y - 1) = 0.25(x - 2)² ระยะโฟกัส c มีค่าเท่าใด และจุดโฟกัสอยู่ที่ใด?",
+                options: [
+                    "c = 1.0, จุดโฟกัส (2, 2)",
+                    "c = 0.25, จุดโฟกัส (2, 1.25)",
+                    "c = 4.0, จุดโฟกัส (2, 5)",
+                    "c = 0.5, จุดโฟกัส (2.5, 1)"
+                ],
+                correct: 0,
+                expl: "จากความสัมพันธ์ a = 1/(4c) หรือ c = 1/(4a) จะได้ c = 1 / (4 * 0.25) = 1.0 ดังนั้น จุดโฟกัส F(h, k + c) = (2, 1 + 1) = (2, 2)"
+            },
+            {
+                cat: "ลิมิตระยะโฟกัส",
+                title: "เมื่อค่า a มีค่าเข้าใกล้ 0 (a ➔ 0) เส้นไดเรกตริกซ์และจุดโฟกัสจะมีลักษณะอย่างไร?",
+                options: [
+                    "จุดโฟกัสและเส้นไดเรกตริกซ์จะถอยห่างออกจากจุดยอดออกไปไกลถึงอนันต์ (∞)",
+                    "จุดโฟกัสจะทับกับจุดยอดพอดี",
+                    "เส้นไดเรกตริกซ์จะตัดกับแกนสมมาตรที่จุดยอด",
+                    "ระยะโฟกัส c จะเท่ากับ 0"
+                ],
+                correct: 0,
+                expl: "เนื่องจาก c = 1/(4a) ดังนั้นเมื่อ a ➔ 0 จะทำให้ c ➔ ∞ ส่งผลให้จุดโฟกัสและเส้นไดเรกตริกซ์เคลื่อนที่ออกไปไกลอย่างไม่มีที่สิ้นสุด"
+            },
+            {
+                cat: "ความยาวลาตัสเรกตั้ม",
+                title: "ความยาวของส่วนของเส้นตรงลาตัสเรกตั้ม (Latus Rectum) คำนวณได้จากสูตรใด?",
+                options: [
+                    "|2c| หรือ |1/(2a)|",
+                    "|4c| หรือ |1/a|",
+                    "|c²|",
+                    "|a * h * k|"
+                ],
+                correct: 1,
+                expl: "ความยาวของลาตัสเรกตั้มที่ผ่านจุดโฟกัสและตั้งฉากกับแกนสมมาตร มีค่าเท่ากับ |4c| หรือ |1/a| เสมอ"
+            }
+        ];
+
+        window.onload = function() {
+            canvas = document.getElementById('mainCanvas');
+            ctx = canvas.getContext('2d');
+
+            resizeCanvas();
+            setupEventListeners();
+            updateAllCalculations();
+            loadQuizStep();
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                drawGraph();
+            });
+        };
+
+        function resizeCanvas() {
+            if (!canvas || !canvas.parentElement) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            drawGraph();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-500/25', 'text-sky-300', 'border', 'border-sky-500/50', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-tab-${tabId}`);
+            activeBtn.classList.add('bg-sky-500/25', 'text-sky-300', 'border', 'border-sky-500/50', 'shadow-md');
+            activeBtn.classList.remove('text-slate-400');
+
+            if (tabId === 'graph') {
+                setTimeout(resizeCanvas, 50);
+            }
+        }
+
+        function toggleOrientation() {
+            isVertical = !isVertical;
+            const deskText = document.getElementById('desktop-orientation-text');
+            const mobText = document.getElementById('mobile-orientation-text');
+
+            if (isVertical) {
+                deskText.textContent = 'แนวตั้ง: (y-k) = a(x-h)²';
+                mobText.textContent = 'แนวตั้ง (y)';
+            } else {
+                deskText.textContent = 'แนวนอน: (x-h) = a(y-k)²';
+                mobText.textContent = 'แนวนอน (x)';
+            }
+            updateAllCalculations();
+        }
+
+        // --- Parameter Control Functions ---
+        function setParamValue(param, val) {
+            let parsedVal;
+            if (val === 'Infinity') parsedVal = Infinity;
+            else if (val === '-Infinity') parsedVal = -Infinity;
+            else parsedVal = parseFloat(val);
+
+            if (param === 'a') paramA = parsedVal;
+            if (param === 'h') paramH = parsedVal;
+            if (param === 'k') paramK = parsedVal;
+
+            syncInputsUI();
+            updateAllCalculations();
+        }
+
+        function sliderInputChanged(param, val) {
+            const numVal = parseFloat(val);
+            if (param === 'a') paramA = numVal;
+            if (param === 'h') paramH = numVal;
+            if (param === 'k') paramK = numVal;
+
+            syncInputsUI();
+            updateAllCalculations();
+        }
+
+        function manualInputChanged(param, textVal) {
+            let parsed;
+            const clean = textVal.trim().toLowerCase();
+            if (clean === 'inf' || clean === 'infinity' || clean === '∞' || clean === '+inf' || clean === '+infinity') {
+                parsed = Infinity;
+            } else if (clean === '-inf' || clean === '-infinity' || clean === '-∞') {
+                parsed = -Infinity;
+            } else {
+                parsed = parseFloat(textVal);
+                if (isNaN(parsed)) parsed = 0;
+            }
+
+            if (param === 'a') paramA = parsed;
+            if (param === 'h') paramH = parsed;
+            if (param === 'k') paramK = parsed;
+
+            syncInputsUI();
+            updateAllCalculations();
+        }
+
+        function syncInputsUI() {
+            // Parameter a
+            document.getElementById('num-input-a').value = isFinite(paramA) ? paramA.toFixed(2) : (paramA > 0 ? '+Infinity' : '-Infinity');
+            if (isFinite(paramA) && Math.abs(paramA) <= 5) document.getElementById('slider-a').value = paramA;
+
+            // Parameter h
+            document.getElementById('num-input-h').value = isFinite(paramH) ? paramH.toFixed(2) : (paramH > 0 ? '+Infinity' : '-Infinity');
+            if (isFinite(paramH) && Math.abs(paramH) <= 20) document.getElementById('slider-h').value = paramH;
+
+            // Parameter k
+            document.getElementById('num-input-k').value = isFinite(paramK) ? paramK.toFixed(2) : (paramK > 0 ? '+Infinity' : '-Infinity');
+            if (isFinite(paramK) && Math.abs(paramK) <= 20) document.getElementById('slider-k').value = paramK;
+        }
+
+        function resetAllParams() {
+            paramA = 1.0;
+            paramH = 0.0;
+            paramK = 0.0;
+            isVertical = true;
+            document.getElementById('desktop-orientation-text').textContent = 'แนวตั้ง: (y-k) = a(x-h)²';
+            document.getElementById('mobile-orientation-text').textContent = 'แนวตั้ง (y)';
+            resetCanvasView();
+            syncInputsUI();
+            updateAllCalculations();
+        }
+
+        function applyPreset(presetName) {
+            if (presetName === 'standard') {
+                paramA = 1.0; paramH = 0.0; paramK = 0.0; isVertical = true;
+            } else if (presetName === 'inf-a') {
+                paramA = Infinity; paramH = 0.0; paramK = 0.0; isVertical = true;
+            } else if (presetName === 'zero-a') {
+                paramA = 0.0; paramH = 0.0; paramK = 0.0; isVertical = true;
+            } else if (presetName === 'inf-h') {
+                paramA = 0.5; paramH = Infinity; paramK = 0.0; isVertical = true;
+            } else if (presetName === 'inf-k') {
+                paramA = 0.5; paramH = 0.0; paramK = -Infinity; isVertical = true;
+            } else if (presetName === 'huge-vals') {
+                paramA = 0.01; paramH = 1500; paramK = -800; isVertical = true;
+            }
+            autoScaleCanvas();
+            syncInputsUI();
+            updateAllCalculations();
+        }
+
+        function updateAllCalculations() {
+            const isInfA = !isFinite(paramA);
+            const isInfH = !isFinite(paramH);
+            const isInfK = !isFinite(paramK);
+            const isAnyInf = isInfA || isInfH || isInfK;
+
+            // Toggle Infinity Status Banner
+            const banner = document.getElementById('infinity-status-banner');
+            const bannerText = document.getElementById('infinity-banner-text');
+            if (isAnyInf) {
+                banner.classList.remove('hidden');
+                let infDetails = [];
+                if (isInfA) infDetails.push(`a = ${paramA > 0 ? '+∞' : '-∞'}`);
+                if (isInfH) infDetails.push(`h = ${paramH > 0 ? '+∞' : '-∞'}`);
+                if (isInfK) infDetails.push(`k = ${paramK > 0 ? '+∞' : '-∞'}`);
+                bannerText.innerHTML = `สภาวะอินฟินิตี้เปิดใช้งาน: <strong>${infDetails.join(', ')}</strong>`;
+            } else {
+                banner.classList.add('hidden');
+            }
+
+            // Standard Form String Building
+            let strA = isInfA ? (paramA > 0 ? '∞' : '-∞') : paramA.toFixed(2);
+            let strH = isInfH ? (paramH > 0 ? '∞' : '-∞') : Math.abs(paramH).toFixed(2);
+            let strK = isInfK ? (paramK > 0 ? '∞' : '-∞') : Math.abs(paramK).toFixed(2);
+
+            let signH = paramH >= 0 || isInfH ? `- ${strH}` : `+ ${strH}`;
+            let signK = paramK >= 0 || isInfK ? `- ${strK}` : `+ ${strK}`;
+
+            let eqStr = isVertical ? 
+                `(y ${signK}) = ${strA}(x ${signH})²` : 
+                `(x ${signH}) = ${strA}(y ${signK})²`;
+
+            document.getElementById('equation-standard').textContent = eqStr;
+
+            // Focus c calculation: a = 1 / (4c) => c = 1 / (4a)
+            let valC = (isFinite(paramA) && paramA !== 0) ? (1 / (4 * paramA)) : (paramA === 0 ? Infinity : 0);
+            let strC = isFinite(valC) ? valC.toFixed(4) : (valC > 0 ? '∞' : '-∞');
+
+            document.getElementById('equation-focus-form').textContent = isVertical ? 
+                `(x ${signH})² = 4(${strC})(y ${signK})` : 
+                `(y ${signK})² = 4(${strC})(x ${signH})`;
+
+            // Detailed Cards Updating
+            updateAnalysisCards(valC);
+
+            drawGraph();
+        }
+
+        function updateAnalysisCards(valC) {
+            // Vertex V
+            let vStr = `(${isFinite(paramH) ? paramH.toFixed(2) : (paramH > 0 ? '+∞' : '-∞')}, ${isFinite(paramK) ? paramK.toFixed(2) : (paramK > 0 ? '+∞' : '-∞')})`;
+            document.getElementById('card-vertex-val').textContent = `V = ${vStr}`;
+
+            // Focus F
+            let focusX = isVertical ? paramH : (paramH + valC);
+            let focusY = isVertical ? (paramK + valC) : paramK;
+            let fXStr = isFinite(focusX) ? focusX.toFixed(2) : (focusX > 0 ? '+∞' : '-∞');
+            let fYStr = isFinite(focusY) ? focusY.toFixed(2) : (focusY > 0 ? '+∞' : '-∞');
+            document.getElementById('card-focus-val').textContent = `F = (${fXStr}, ${fYStr})`;
+            document.getElementById('card-focus-desc').textContent = `ระยะโฟกัส c = ${isFinite(valC) ? valC.toFixed(4) : '∞'}`;
+
+            // Directrix Line
+            if (isVertical) {
+                let dirY = paramK - valC;
+                let dirYStr = isFinite(dirY) ? dirY.toFixed(2) : (dirY > 0 ? '+∞' : '-∞');
+                document.getElementById('card-directrix-val').textContent = `y = ${dirYStr}`;
+            } else {
+                let dirX = paramH - valC;
+                let dirXStr = isFinite(dirX) ? dirX.toFixed(2) : (dirX > 0 ? '+∞' : '-∞');
+                document.getElementById('card-directrix-val').textContent = `x = ${dirXStr}`;
+            }
+
+            // Axis of Symmetry
+            if (isVertical) {
+                let axXStr = isFinite(paramH) ? paramH.toFixed(2) : (paramH > 0 ? '+∞' : '-∞');
+                document.getElementById('card-axis-val').textContent = `x = ${axXStr}`;
+            } else {
+                let axYStr = isFinite(paramK) ? paramK.toFixed(2) : (paramK > 0 ? '+∞' : '-∞');
+                document.getElementById('card-axis-val').textContent = `y = ${axYStr}`;
+            }
+
+            // Latus Rectum
+            let latusLen = Math.abs(4 * valC);
+            let latusStr = isFinite(latusLen) ? latusLen.toFixed(3) : '∞';
+            document.getElementById('card-latus-val').textContent = `ความยาว |4c| = ${latusStr}`;
+
+            // General Form: ax^2 + bx + c_gen
+            if (isFinite(paramA) && isFinite(paramH) && isFinite(paramK)) {
+                let b = -2 * paramA * paramH;
+                let cGen = paramA * Math.pow(paramH, 2) + paramK;
+                let signB = b >= 0 ? `+ ${b.toFixed(2)}` : `- ${Math.abs(b).toFixed(2)}`;
+                let signCGen = cGen >= 0 ? `+ ${cGen.toFixed(2)}` : `- ${Math.abs(cGen).toFixed(2)}`;
+                document.getElementById('card-general-val').textContent = isVertical ?
+                    `y = ${paramA.toFixed(2)}x² ${signB}x ${signCGen}` :
+                    `x = ${paramA.toFixed(2)}y² ${signB}y ${signCGen}`;
+            } else {
+                document.getElementById('card-general-val').textContent = 'สภาวะลิมิตอนันต์ (รูปแบบทั่วไปเป็นอนันต์)';
+            }
+        }
+
+        function setupEventListeners() {
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                if (isDragging) {
+                    offsetX += (e.clientX - startX);
+                    offsetY += (e.clientY - startY);
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    drawGraph();
+                } else {
+                    inspectAtPixel(mouseX, mouseY);
+                }
+            });
+
+            canvas.addEventListener('mouseup', () => isDragging = false);
+            canvas.addEventListener('mouseleave', () => {
+                isDragging = false;
+                hoverMathX = null;
+                hoverMathY = null;
+                drawGraph();
+            });
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging) {
+                    const x = e.touches[0].clientX;
+                    const y = e.touches[0].clientY;
+                    offsetX += (x - startX);
+                    offsetY += (y - startY);
+                    startX = x;
+                    startY = y;
+                    drawGraph();
+
+                    const rect = canvas.getBoundingClientRect();
+                    inspectAtPixel(x - rect.left, y - rect.top);
+                }
+            });
+
+            canvas.addEventListener('touchend', () => isDragging = false);
+        }
+
+        function inspectAtPixel(px, py) {
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            const centerX = width / 2 + offsetX;
+            const centerY = height / 2 + offsetY;
+
+            const mathX = (px - centerX) / scale;
+            const mathY = (centerY - py) / scale;
+
+            document.getElementById('inspect-coords').textContent = `(${mathX.toFixed(2)}, ${mathY.toFixed(2)})`;
+
+            if (isFinite(paramA) && isFinite(paramH) && isFinite(paramK)) {
+                let curveY = isVertical ? 
+                    (paramA * Math.pow(mathX - paramH, 2) + paramK) :
+                    (paramA * Math.pow(mathY - paramK, 2) + paramH);
+                document.getElementById('inspect-curve-y').textContent = curveY.toFixed(2);
+            } else {
+                document.getElementById('inspect-curve-y').textContent = '∞';
+            }
+
+            hoverMathX = mathX;
+            hoverMathY = mathY;
+            drawGraph();
+        }
+
+        function zoomCanvas(factor) {
+            scale *= factor;
+            scale = Math.max(0.001, Math.min(5000, scale));
+            document.getElementById('overlay-zoom').textContent = (scale / 30).toFixed(2) + 'x';
+            document.getElementById('overlay-scale').textContent = scale.toFixed(1) + 'px/u';
+            drawGraph();
+        }
+
+        function resetCanvasView() {
+            scale = 30;
+            offsetX = 0;
+            offsetY = 0;
+            document.getElementById('overlay-zoom').textContent = '1.00x';
+            document.getElementById('overlay-scale').textContent = '30.0px/u';
+            drawGraph();
+        }
+
+        function autoScaleCanvas() {
+            // Auto scale grid dynamically depending on h, k magnitude
+            let effH = isFinite(paramH) ? paramH : 0;
+            let effK = isFinite(paramK) ? paramK : 0;
+            let maxDist = Math.max(Math.abs(effH), Math.abs(effK), 5);
+
+            const width = canvas.clientWidth || 400;
+            scale = (width / 2.5) / maxDist;
+            scale = Math.max(0.01, Math.min(200, scale));
+
+            // Center vertex on screen
+            offsetX = -effH * scale;
+            offsetY = effK * scale;
+
+            document.getElementById('overlay-zoom').textContent = (scale / 30).toFixed(2) + 'x';
+            document.getElementById('overlay-scale').textContent = scale.toFixed(1) + 'px/u';
+            drawGraph();
+        }
+
+        function drawGraph() {
+            if (!ctx) return;
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const centerX = width / 2 + offsetX;
+            const centerY = height / 2 + offsetY;
+
+            // Indicator for Infinity overlay
+            const infInd = document.getElementById('canvas-infinity-indicator');
+            const infTxt = document.getElementById('canvas-infinity-text');
+            const isAnyInf = !isFinite(paramA) || !isFinite(paramH) || !isFinite(paramK);
+
+            if (isAnyInf) {
+                infInd.classList.remove('hidden');
+                if (!isFinite(paramA)) infTxt.textContent = 'ลิมิต a ➔ ±∞ (เส้นตรง)';
+                else if (!isFinite(paramH)) infTxt.textContent = 'จุดยอด h อยู่ ณ อนันต์';
+                else if (!isFinite(paramK)) infTxt.textContent = 'จุดยอด k อยู่ ณ อนันต์';
+            } else {
+                infInd.classList.add('hidden');
+            }
+
+            // Draw Cartesian Grid Lines
+            drawGrid(width, height, centerX, centerY);
+
+            // SPECIAL CASE 1: a = Infinity / -Infinity (Vertical or Horizontal Line)
+            if (!isFinite(paramA)) {
+                drawInfinityACase(width, height, centerX, centerY);
+                return;
+            }
+
+            // SPECIAL CASE 2: h or k is Infinity
+            if (!isFinite(paramH) || !isFinite(paramK)) {
+                drawInfinityHKCase(width, height, centerX, centerY);
+                return;
+            }
+
+            // NORMAL / FINITE CASE GRAPHING
+            const valC = (paramA !== 0) ? (1 / (4 * paramA)) : Infinity;
+
+            // 1. Draw Directrix Line
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            if (isVertical) {
+                let dirY = centerY - (paramK - valC) * scale;
+                ctx.moveTo(0, dirY); ctx.lineTo(width, dirY);
+            } else {
+                let dirX = centerX + (paramH - valC) * scale;
+                ctx.moveTo(dirX, 0); ctx.lineTo(dirX, height);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 2. Draw Axis of Symmetry Line
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            if (isVertical) {
+                let axX = centerX + paramH * scale;
+                ctx.moveTo(axX, 0); ctx.lineTo(axX, height);
+            } else {
+                let axY = centerY - paramK * scale;
+                ctx.moveTo(0, axY); ctx.lineTo(width, axY);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 3. Draw Parabola Curve
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+
+            let firstPoint = true;
+            if (isVertical) {
+                for (let px = 0; px <= width; px += 2) {
+                    let mathX = (px - centerX) / scale;
+                    let mathY = paramA * Math.pow(mathX - paramH, 2) + paramK;
+                    let py = centerY - mathY * scale;
+
+                    if (firstPoint) { ctx.moveTo(px, py); firstPoint = false; }
+                    else { ctx.lineTo(px, py); }
+                }
+            } else {
+                for (let py = 0; py <= height; py += 2) {
+                    let mathY = (centerY - py) / scale;
+                    let mathX = paramA * Math.pow(mathY - paramK, 2) + paramH;
+                    let px = centerX + mathX * scale;
+
+                    if (firstPoint) { ctx.moveTo(px, py); firstPoint = false; }
+                    else { ctx.lineTo(px, py); }
+                }
+            }
+            ctx.stroke();
+
+            // 4. Draw Focus Point (F) & Vertex Point (V)
+            let vPx = centerX + paramH * scale;
+            let vPy = centerY - paramK * scale;
+
+            // Vertex Point (Orange)
+            ctx.fillStyle = '#fb923c';
+            ctx.beginPath(); ctx.arc(vPx, vPy, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke();
+
+            // Focus Point (Purple) if finite
+            if (isFinite(valC)) {
+                let fPx = isVertical ? vPx : centerX + (paramH + valC) * scale;
+                let fPy = isVertical ? centerY - (paramK + valC) * scale : vPy;
+
+                ctx.fillStyle = '#c084fc';
+                ctx.beginPath(); ctx.arc(fPx, fPy, 5, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.stroke();
+
+                // Latus Rectum Segment (Amber)
+                ctx.strokeStyle = '#facc15';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                if (isVertical) {
+                    let halfLR = Math.abs(2 * valC) * scale;
+                    ctx.moveTo(fPx - halfLR, fPy); ctx.lineTo(fPx + halfLR, fPy);
+                } else {
+                    let halfLR = Math.abs(2 * valC) * scale;
+                    ctx.moveTo(fPx, fPy - halfLR); ctx.lineTo(fPx, fPy + halfLR);
+                }
+                ctx.stroke();
+            }
+
+            // 5. Draw Hover Pointer Marker
+            if (hoverMathX !== null && hoverMathY !== null) {
+                let hPx = centerX + hoverMathX * scale;
+                let hPy = centerY - hoverMathY * scale;
+                ctx.fillStyle = '#34d399';
+                ctx.beginPath(); ctx.arc(hPx, hPy, 4, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        function drawGrid(width, height, centerX, centerY) {
+            ctx.lineWidth = 1;
+            let step = scale;
+
+            // Adjust grid density dynamically for huge scales
+            while (step < 25) step *= 5;
+            while (step > 200) step /= 5;
+
+            // Vertical Grid
+            for (let x = centerX % step; x < width; x += step) {
+                ctx.strokeStyle = (Math.abs(x - centerX) < 1) ? 'rgba(56, 189, 248, 0.5)' : 'rgba(255, 255, 255, 0.05)';
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+            }
+
+            // Horizontal Grid
+            for (let y = centerY % step; y < height; y += step) {
+                ctx.strokeStyle = (Math.abs(y - centerY) < 1) ? 'rgba(56, 189, 248, 0.5)' : 'rgba(255, 255, 255, 0.05)';
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+            }
+
+            // Numbers on axis
+            ctx.fillStyle = 'rgba(148, 163, 184, 0.6)';
+            ctx.font = '10px JetBrains Mono, sans-serif';
+
+            for (let x = centerX % step; x < width; x += step) {
+                let val = ((x - centerX) / scale);
+                if (Math.abs(val) > 0.001) ctx.fillText(val.toFixed(1), x + 2, centerY + 12);
+            }
+        }
+
+        function drawInfinityACase(width, height, centerX, centerY) {
+            // When a = infinity, parabola becomes vertical line x = h (or y = k)
+            ctx.strokeStyle = '#c084fc';
+            ctx.lineWidth = 4;
+            ctx.shadowColor = '#c084fc';
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+
+            if (isVertical) {
+                let lineX = centerX + (isFinite(paramH) ? paramH : 0) * scale;
+                ctx.moveTo(lineX, 0); ctx.lineTo(lineX, height);
+            } else {
+                let lineY = centerY - (isFinite(paramK) ? paramK : 0) * scale;
+                ctx.moveTo(0, lineY); ctx.lineTo(width, lineY);
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0; // Reset
+
+            // Label text on screen
+            ctx.fillStyle = '#f43f5e';
+            ctx.font = '14px Sarabun, sans-serif';
+            ctx.fillText('สภาวะลิมิต a ➔ ∞ (เส้นตรงสลัก)', width / 2 - 90, 40);
+        }
+
+        function drawInfinityHKCase(width, height, centerX, centerY) {
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8, 6]);
+
+            // Draw directional vector arrow showing parabolic curve heading off-screen
+            ctx.beginPath();
+            ctx.moveTo(width / 2, height / 2);
+            
+            let dirX = isFinite(paramH) ? 0 : (paramH > 0 ? 1 : -1);
+            let dirY = isFinite(paramK) ? 0 : (paramK > 0 ? -1 : 1);
+
+            ctx.lineTo(width / 2 + dirX * 120, height / 2 + dirY * 120);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#fb923c';
+            ctx.font = '13px Sarabun, sans-serif';
+            ctx.fillText('จุดยอด/โฟกัส เลื่อนไปสู่อินฟินิตี้ (∞)', width / 2 - 100, height / 2 - 20);
+        }
+
+        function loadQuizStep() {
+            if (quizIndex >= quizQuestions.length) {
+                document.getElementById('quiz-question-box').classList.add('hidden');
+                document.getElementById('quiz-result-box').classList.remove('hidden');
+                document.getElementById('quiz-final-eval').textContent = `คุณทำคะแนนได้ ${quizScore} จาก ${quizQuestions.length} คะแนน!`;
+                return;
+            }
+
+            const q = quizQuestions[quizIndex];
+            document.getElementById('quiz-step-text').textContent = `ข้อที่ ${quizIndex + 1} จาก ${quizQuestions.length}`;
+            document.getElementById('quiz-cat-text').textContent = q.cat;
+            document.getElementById('quiz-question-title').textContent = q.title;
+            document.getElementById('quiz-score-num').textContent = `${quizScore} / ${quizQuestions.length}`;
+
+            const list = document.getElementById('quiz-options-list');
+            list.innerHTML = '';
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'glass-card p-3 rounded-xl text-left text-xs sm:text-sm text-slate-200 hover:bg-slate-800/80 transition-all border border-slate-700/60 flex items-center justify-between group';
+                btn.innerHTML = `
+                    <span><strong class="text-sky-400 mr-2">${['ก', 'ข', 'ค', 'ง'][idx]}.</strong> ${optText}</span>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-sky-400"></i>
+                `;
+                btn.onclick = () => selectQuizAnswer(idx);
+                list.appendChild(btn);
+            });
+
+            document.getElementById('quiz-explanation-box').classList.add('hidden');
+            document.getElementById('btn-quiz-next').classList.add('hidden');
+            quizAnswered = false;
+        }
+
+        function selectQuizAnswer(selectedIndex) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const q = quizQuestions[quizIndex];
+            const list = document.getElementById('quiz-options-list');
+            const btns = list.getElementsByTagName('button');
+
+            if (selectedIndex === q.correct) {
+                quizScore++;
+                btns[selectedIndex].classList.add('bg-emerald-500/20', 'border-emerald-500/60', 'text-emerald-300');
+            } else {
+                btns[selectedIndex].classList.add('bg-rose-500/20', 'border-rose-500/60', 'text-rose-300');
+                btns[q.correct].classList.add('bg-emerald-500/20', 'border-emerald-500/60', 'text-emerald-300');
+            }
+
+            document.getElementById('quiz-score-num').textContent = `${quizScore} / ${quizQuestions.length}`;
+
+            const explBox = document.getElementById('quiz-explanation-box');
+            explBox.innerHTML = `<strong class="text-sky-400"><i class="fa-solid fa-lightbulb mr-1"></i> คำอธิบายเฉลย:</strong> ${q.expl}`;
+            explBox.classList.remove('hidden');
+
+            document.getElementById('btn-quiz-next').classList.remove('hidden');
+        }
+
+        function nextQuizStep() {
+            quizIndex++;
+            loadQuizStep();
+        }
+
+        function restartQuiz() {
+            quizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('quiz-question-box').classList.remove('hidden');
+            loadQuizStep();
+        }
+    </script>
+</body>
+</html>
